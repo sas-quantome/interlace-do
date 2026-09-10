@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# Description: Reports broken URLs from a list of URLs using wget or curl.
+
+# --- Input Validation ---
+if [ -z "$1" ]; then
+    echo "Usage: $0 <url_list_file.txt>"
+    exit 1
+fi
+
+URL_FILE="$1"
+
+if [ ! -f "$URL_FILE" ]; then
+    echo "Error: File '$URL_FILE' not found!"
+    exit 1
+fi
+
+echo "Verifying URLs in '$URL_FILE'..."
+echo "---------------------------------------------------"
+
+# --- Dependency Check ---
+if command -v wget >/dev/null 2>&1; then
+    DOWNLOAD_TOOL="wget"
+elif command -v curl >/dev/null 2>&1; then
+    DOWNLOAD_TOOL="curl"
+else
+    echo "Error: Neither 'wget' nor 'curl' was found on this system."
+    exit 1
+fi
+
+BROKEN_COUNT=0
+
+# --- Verification Loop ---
+while IFS= read -r url || [ -n "$url" ]; do
+    url=$(echo "$url" | xargs)
+
+    # Skip empty lines or lines starting with '#'
+    if [[ -z "$url" || "$url" == \#* ]]; then
+        continue
+    fi
+
+    # Execute the appropriate download command
+    if [ "$DOWNLOAD_TOOL" == "wget" ]; then
+        # Check the URL using wget in spider mode
+        HTTP_CODE=$(wget --spider --server-response --quiet "$url" 2>&1 | awk '/^  HTTP/{print $2}' | tail -n 1)
+        # Note: If wget fails to resolve the URL completely, HTTP_CODE might be empty.
+        # We can handle that by setting it to 000 for our logic to catch it as broken.
+        if [ -z "$HTTP_CODE" ]; then
+            HTTP_CODE="000"
+        fi
+    else
+        HTTP_CODE=$(curl -s -o /dev/null -L -I -w "%{http_code}" "$url")
+    fi
+
+    # Check if curl failed completely (e.g., DNS resolution failed, server down)
+    if [ $? -ne 0 ]; then
+        echo "[BROKEN] (Connection Failed) : $url"
+        BROKEN_COUNT=$((BROKEN_COUNT + 1))
+
+    # Check if the HTTP code indicates success (200s are success)
+    elif [[ "$HTTP_CODE" == 2* ]]; then
+        echo "[OK]     (HTTP $HTTP_CODE)     : $url"
+
+    # Anything else (404 Not Found, 403 Forbidden, 500 Server Error) is flagged
+    else
+        echo "[BROKEN] (HTTP $HTTP_CODE)     : $url"
+        BROKEN_COUNT=$((BROKEN_COUNT + 1))
+    fi
+
+done < "$URL_FILE"
+
+echo "---------------------------------------------------"
+
+# --- Final Report ---
+if [ "$BROKEN_COUNT" -eq 0 ]; then
+    echo "SUCCESS: All URLs are valid! The pipeline is ready to run."
+    exit 0
+else
+    echo "WARNING: Found $BROKEN_COUNT broken URL(s). Manual intervention required."
+    exit 1
+fi

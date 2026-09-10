@@ -1,0 +1,18 @@
+/*
+ * Copyright 2026 Quantome SAS
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package main
+
+import "github.com/sas-quantome/interlace-do/internal/app/a32001"
+
+// main configures the application, commits work, and exits cleanly.
+func main() {
+	var err error
+	app := new(a32001.Application)
+	if app.Start() {
+		err = app.Commit()
+	}
+	app.End(err)
+}

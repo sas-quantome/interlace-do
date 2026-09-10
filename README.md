@@ -1,2 +1,9 @@
+###### September 10, 2026: interlace-do readme v1
+
 # interlace-do
-Interlace Go data retrieval toolset and usage with the Gene data playground
+
+Welcome to **interlace-do**! Interlace Go toolset and usage with the **interlace-ex** Gene data playground.
+
+![interlace-do](assets/interlace-do.png)
+
+### Contents
