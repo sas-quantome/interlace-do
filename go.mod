@@ -2,6 +2,6 @@ module github.com/sas-quantome/interlace-do
 
 go 1.27.0
 
-require github.com/sas-quantome/interlace-go v0.0.0-20260910143732-0cb0ec02eb6f
+require github.com/sas-quantome/interlace-go v0.0.0-20260912150711-7dae01e0173a
 
-require golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa // indirect
+require golang.org/x/exp v0.0.0-20260908205506-85c1c2202aba // indirect

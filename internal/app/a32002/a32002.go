@@ -6,56 +6,82 @@
 package a32002
 
 import (
+	"errors"
+
 	"github.com/sas-quantome/interlace-do/internal/pkg/arranger"
-	"github.com/sas-quantome/interlace-go/pkg/contractor"
+	"github.com/sas-quantome/interlace-go/pkg/runner"
+	"github.com/sas-quantome/interlace-go/pkg/storekeeper"
 )
 
-// constant program version number: to be appended to the ISO 8601 go-interlace version string.
 const (
-	programVersion = "1"       // Increment this number for each release.
-	assetName      = "synonym" // The entity's asset name.
+	// Increment this number for each release.
+	programVersion = "1"
+
+	// qryInp configuration key for target asset qry items to associate with the val items.
+	qryInp = "QRY_INP_FILE"
+
+	// keyInp configuration key for source asset key items that must match the qry items, this is the search array.
+	keyInp = "KEY_INP_FILE"
+
+	// valInp configuration key for source asset val items to insert a new binary file in the target asset.
+	valInp = "VAL_INP_FILE"
 )
 
 // Application represents the main struct for managing resources, computing, and coordinating deterministic data flows.
 type Application struct {
-	refiner *contractor.Refiner // refiner configures and handles the data refinement.
+	manager   *runner.Manager                   // manager commits the execution flow and handles resource management.
+	bin       *storekeeper.BinAsset             // bin holds a reference to the new binary file.
+	binFiles  map[string]*storekeeper.Container // binFiles to read.
+	ignoreVer bool                              // ignoreVer flags to ignore version verification when reading bin files.
+	nDecoded  int                               // nDecoded is the number of rows in the decoded data: parallel arrays.
+	nWritten  int                               // nWritten is the number of rows found in the decoded data and written.
 }
 
 // Start configures the Application, verifies parameters, begins logging, and returns true unless the help page is requested.
 // It exits safely with an explicit error message whenever the configuration is invalid.
 func (app *Application) Start() bool {
-	var helpPageState bool
-	app.refiner, helpPageState = contractor.NewRefiner(
-		false,
-		false,
-		arranger.DnaEntityConcept,
-		arranger.DefaultWorkflow,
-		arranger.ProjectName,
-		"a32002",
-		"creates the Homo sapiens Gene entity Synonym asset from the NCBI Gene DB.",
-		programVersion,
-		[]string{"sdk_entrez_gene_id_u.bin", "udk_protein_id_s.bin", "udk_synonym_s.bin", "udk_synonym_category_cv_d.bin"})
-	return helpPageState
+	app.manager = runner.NewManager()
+	app.manager.SetConfigTopic(arranger.ProjectName, "a32002", app.appAim(), programVersion)
+	// Capture the command line arguments.
+	app.parseCommandLineArgs()
+	// Print the help page if requested and return false to exit the program.
+	if app.manager.GetBitFlag(runner.MgrFlgHelp) == true {
+		app.manager.HelpPage(runner.HelpDoc(nil, ""))
+		return false
+	}
+	// Print the starting information and return true to commit work.
+	app.manager.PrintStartingInfo()
+	return true
 }
 
 // Commit executes the application's work.
 func (app *Application) Commit() error {
-	app.refiner.Mgr.Say("setting up the refiner ...")
-	if commit, err := app.refiner.Commit(assetName); err != nil {
+	app.binFiles = make(map[string]*storekeeper.Container)
+	if err := app.setBinInput(); err != nil {
 		return err
-	} else if commit == false {
-		return nil
 	}
-	app.refiner.AddBin("sdk_synonym_s.bin")             // CW tsv column 0
-	app.refiner.AddBin("udk_entrez_gene_id_u.bin")      // CW tsv column 1
-	app.refiner.AddBin("udk_protein_id_s.bin")          // CW tsv column 2
-	app.refiner.AddBin("udk_synonym_category_cv_d.bin") // CW tsv column 3
-	app.refiner.AddBin("udk_synonym_version_s.bin")     // CW tsv column 4
-	app.refiner.Mgr.Say("creating the gene synonym asset ...")
+	app.setBinOutput()
+	if err := app.createBin(); err != nil {
+		return err
+	}
+	if err := app.saveBin(); err != nil {
+		return err
+	}
 	return nil
 }
 
 // End safely exits the Application.
 func (app *Application) End(err error) {
-	app.refiner.End(err)
+	var e []error
+	if err != nil {
+		e = append(e, err)
+	}
+	for key := range app.binFiles {
+		if app.binFiles[key] != nil {
+			if ret := app.binFiles[key].CloseMappedArr(); ret != nil {
+				e = append(e, ret)
+			}
+		}
+	}
+	app.manager.End(errors.Join(e...))
 }

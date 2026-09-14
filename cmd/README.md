@@ -7,12 +7,12 @@ To do
 ```
 ## Contents
 
-| AppID    | Dependencies | Application Aim                                                   |
-|----------|--------------|-------------------------------------------------------------------|
-| [a32001] |              | `Creates` a **Metadata & Synonym** assets from a TSV file.        |
-| [a32002] | [a32001]     | `Inserts` a **sdk_cid_s.bin** binary file into an existing asset. |
-| [a32003] |              | `Creates` a **DNA** asset from a nucleic acid FASTA file.         |
-| [a32004] |              | `Fetches` data from an asset.                                     |
+| AppID    | Dependencies | Application Aim                                                             |
+|----------|--------------|-----------------------------------------------------------------------------|
+| [a32001] |              | `Creates` a **Metadata & Synonym** assets from a TSV file.                  |
+| [a32002] | [a32001]     | `Inserts` a property item array related to correspondent synonym/item pair. |
+| [a32003] |              | `Creates` a **DNA** asset from a nucleic acid FASTA file.                   |
+| [a32004] |              | `Fetches` data from an asset.                                               |
 
 [a32001]: ./a32001/README.md
 [a32002]: ./a32002/README.md
