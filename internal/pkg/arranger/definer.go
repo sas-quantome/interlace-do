@@ -6,7 +6,10 @@
 package arranger
 
 const (
-	DnaEntityConcept = "dna"
+	CursorOffset     = "CURSOR_OFFSET"
 	DefaultWorkflow  = "w32001"
+	DnaEntityConcept = "dna"
+	IsConditionalOR  = "IS_CONDITIONAL_OR"
+	MaxRows          = "MAX_ROWS"
 	ProjectName      = "interlace-do"
 )

@@ -15,7 +15,7 @@ import (
 
 const (
 	// Increment this number for each release.
-	programVersion = "1"
+	programVersion = "2"
 
 	// qryInp configuration key for target asset qry items to associate with the val items.
 	qryInp = "QRY_INP_FILE"

@@ -52,5 +52,5 @@ func (app *Application) parseCommandLineArgs() {
 
 // appAim returns the application's decoding and filtering instructions.
 func (app *Application) appAim() string {
-	return `inserts udk_<item> correspondent to suk_<synonym>/udk_<item> where udk_<query> matches sdk_<synonym>.`
+	return `inserts a data property relation from another asset.`
 }

@@ -1,10 +1,24 @@
 DEBUG ?= false
 
+COV="./coverage.txt"
+
 PKG_VERSION ?= $(shell git describe --tags 2>/dev/null || git rev-parse --short HEAD)
 DATE_FMT = +%Y-%m-%d
 BUILD_DATE ?= $(shell date "$(DATE_FMT)")
 GO_LDFLAGS := -X main.buildDate=$(BUILD_DATE) $(GO_LDFLAGS)
 GO_LDFLAGS := $(GO_LDFLAGS) -X main.version=$(PKG_VERSION)
+
+.PHONY: test
+test: ## Run tests
+	go test -coverprofile $(COV) ./...
+
+.PHONY: coverage
+coverage: ## Run coverage report
+	go tool cover -func $(COV)
+
+.PHONY: vet
+vet: ## Run code issues detection
+	go vet ./...
 
 .PHONY: build
 .DEFAULT_GOAL := build

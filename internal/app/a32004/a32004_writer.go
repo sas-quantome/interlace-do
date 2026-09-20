@@ -6,12 +6,11 @@
 package a32004
 
 import (
-	"cmp"
 	"fmt"
-	"math"
 	"strconv"
 	"strings"
 
+	"github.com/sas-quantome/interlace-do/internal/pkg/seeker"
 	"github.com/sas-quantome/interlace-go/pkg/storekeeper"
 )
 
@@ -267,7 +266,7 @@ func (app *Application) writeS(j int) (bool, error) {
 		return app.cacheSet(j)
 	}
 	if app.mustMatch(j) {
-		if !app.compareString(app.binFiles[j].Ope, app.term[j].(string)) {
+		if !seeker.MatchString(app.binFiles[j].Ope, app.text.String(), app.term[j].(string)) {
 			return false, nil
 		}
 	}
@@ -293,9 +292,9 @@ func (app *Application) cacheSet(j int) (bool, error) {
 					if filterTerm {
 						// cache filtered results only
 						if app.binFiles[j].IsCat {
-							ok = compare(app.binFiles[j].Ope, u, app.term[j].(uint64))
+							ok = seeker.MatchAny(app.binFiles[j].Ope, u, app.term[j].(uint64))
 						} else {
-							ok = compare(app.binFiles[j].Ope, uint8(u), app.term[j].(uint8))
+							ok = seeker.MatchAny(app.binFiles[j].Ope, uint8(u), app.term[j].(uint8))
 						}
 					} else {
 						// cache all of them without filtering
@@ -323,7 +322,7 @@ func (app *Application) cacheSet(j int) (bool, error) {
 		// cache filtered results only
 		for {
 			x, rest, more := strings.Cut(t, "|")
-			if x != "" && compare(app.binFiles[j].Ope, x, app.term[j].(string)) {
+			if x != "" && seeker.MatchAny(app.binFiles[j].Ope, x, app.term[j].(string)) {
 				app.cache = append(app.cache, x)
 			}
 			if !more {
@@ -370,15 +369,15 @@ func (app *Application) writeX(j int, val any) (bool, error) {
 	if app.mustMatch(j) {
 		switch v := val.(type) {
 		case int64:
-			ret = compare(app.binFiles[j].Ope, v, app.term[j].(int64))
+			ret = seeker.MatchAny(app.binFiles[j].Ope, v, app.term[j].(int64))
 		case int32:
-			ret = compare(app.binFiles[j].Ope, v, app.term[j].(int32))
+			ret = seeker.MatchAny(app.binFiles[j].Ope, v, app.term[j].(int32))
 		case uint8:
-			ret = compare(app.binFiles[j].Ope, v, app.term[j].(uint8))
+			ret = seeker.MatchAny(app.binFiles[j].Ope, v, app.term[j].(uint8))
 		case uint32:
-			ret = compare(app.binFiles[j].Ope, v, app.term[j].(uint32))
+			ret = seeker.MatchAny(app.binFiles[j].Ope, v, app.term[j].(uint32))
 		case uint64:
-			ret = compare(app.binFiles[j].Ope, v, app.term[j].(uint64))
+			ret = seeker.MatchAny(app.binFiles[j].Ope, v, app.term[j].(uint64))
 		}
 	}
 	if !ret {
@@ -390,82 +389,11 @@ func (app *Application) writeX(j int, val any) (bool, error) {
 func (app *Application) writeF(i, j int) (bool, error) {
 	val := app.binFiles[j].FArr[i]
 	if app.mustMatch(j) {
-		if !compareFloat(app.binFiles[j].Ope, val, app.term[j].(float64)) {
+		if !seeker.MatchFloat(app.binFiles[j].Ope, val, app.term[j].(float64)) {
 			return false, nil
 		}
 	}
 	return true, app.writeToken("%f", val)
-}
-
-func compareFloat(op storekeeper.OperatorType, val, term float64) bool {
-	switch op {
-	case storekeeper.EQ:
-		return math.Abs(val-term) < storekeeper.Epsilon
-	case storekeeper.NE:
-		return math.Abs(val-term) >= storekeeper.Epsilon
-	case storekeeper.GT:
-		return val > term
-	case storekeeper.LT:
-		return val < term
-	case storekeeper.GE:
-		return val >= term
-	case storekeeper.LE:
-		return val <= term
-	default:
-		return false
-	}
-}
-
-func (app *Application) compareString(op storekeeper.OperatorType, term string) bool {
-	switch op {
-	case storekeeper.EQ:
-		return app.text.String() == term
-	case storekeeper.NE:
-		return app.text.String() != term
-	case storekeeper.GT:
-		return app.text.String() > term
-	case storekeeper.LT:
-		return app.text.String() < term
-	case storekeeper.GE:
-		return app.text.String() >= term
-	case storekeeper.LE:
-		return app.text.String() <= term
-	case storekeeper.IN:
-		return strings.Contains(app.text.String(), term)
-	case storekeeper.NI:
-		return !strings.Contains(app.text.String(), term)
-	default:
-		return false
-	}
-}
-
-func compare[T cmp.Ordered](op storekeeper.OperatorType, val, term T) bool {
-	switch op {
-	case storekeeper.EQ:
-		return val == term
-	case storekeeper.NE:
-		return val != term
-	case storekeeper.GT:
-		return val > term
-	case storekeeper.LT:
-		return val < term
-	case storekeeper.GE:
-		return val >= term
-	case storekeeper.LE:
-		return val <= term
-	case storekeeper.IN, storekeeper.NI:
-		if vStr, ok := any(val).(string); ok {
-			tStr := any(term).(string)
-			contains := strings.Contains(vStr, tStr)
-			if op == storekeeper.IN {
-				return contains
-			}
-			return !contains
-		}
-		return false
-	default:
-		return false
-	}
 }
 
 func (app *Application) collectQueryTerms() error {
