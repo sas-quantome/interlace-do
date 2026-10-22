@@ -1,4 +1,4 @@
-###### September 14, 2026: interlace-do cmd readme v2
+###### September 25, 2026: interlace-do cmd readme v2
 
 # CMD
 
@@ -9,7 +9,7 @@
 | AppID    | Dependencies | Application Aim                                                             |
 |----------|--------------|-----------------------------------------------------------------------------|
 | [a32001] |              | `Creates` a **Metadata & Synonym** assets from a TSV file.                  |
-| [a32002] |              | `Inserts` a data property relation from another asset.                      |
+| [a32002] |              | `Inserts` data from one asset to another.                                   |
 | [a32003] |              | `Creates` a **DNA** asset from a nucleic acid FASTA file.                   |
 | [a32004] |              | `Fetches` data from an asset.                                               |
 

@@ -156,7 +156,7 @@ func (app *Application) writeQueryResult() error {
 	or := app.manager.GetBitFlag(orComparison)
 
 	// Determine loop boundaries based on logic mode
-	iterateAll := or || app.nQFields == 0 || app.binQuery < 0
+	iterateAll := app.nQFields == 0 || app.binQuery < 0
 
 	for r := app.idx; r < app.nDecoded && app.nWritten < app.max; r++ {
 		i := r
@@ -172,10 +172,7 @@ func (app *Application) writeQueryResult() error {
 		ok := true
 
 		for j := range app.binFiles {
-			if app.binFiles[j].IsNuc {
-				continue
-			}
-			if app.binFiles[j].Property == "" {
+			if app.binFiles[j].IsNuc || app.binFiles[j].Property == "" {
 				continue
 			}
 			ok, err = app.match(i, j)
@@ -405,6 +402,8 @@ func (app *Application) collectQueryTerms() error {
 		}
 
 		switch app.binFiles[j].DataType {
+		case 's':
+			app.term[j] = app.binFiles[j].Term
 		case 'i':
 			if n, err := strconv.ParseInt(app.binFiles[j].Term.(string), 10, 64); err == nil {
 				app.term[j] = n

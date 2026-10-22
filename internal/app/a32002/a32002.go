@@ -9,6 +9,7 @@ import (
 	"errors"
 
 	"github.com/sas-quantome/interlace-do/internal/pkg/arranger"
+	"github.com/sas-quantome/interlace-go/pkg/contractor"
 	"github.com/sas-quantome/interlace-go/pkg/runner"
 	"github.com/sas-quantome/interlace-go/pkg/storekeeper"
 )
@@ -29,33 +30,41 @@ const (
 
 // Application represents the main struct for managing resources, computing, and coordinating deterministic data flows.
 type Application struct {
-	manager   *runner.Manager                   // manager commits the execution flow and handles resource management.
+	refiner   *contractor.Refiner               // refiner configures and handles the data refinement.
 	bin       *storekeeper.BinAsset             // bin holds a reference to the new binary file.
 	binFiles  map[string]*storekeeper.Container // binFiles to read.
 	ignoreVer bool                              // ignoreVer flags to ignore version verification when reading bin files.
 	nDecoded  int                               // nDecoded is the number of rows in the decoded data: parallel arrays.
 	nWritten  int                               // nWritten is the number of rows found in the decoded data and written.
+	notFound  int                               // notFound holds the count of items without a relation found.
+	nInserted int                               // nInserted holds the count of items inserted.
 }
 
 // Start configures the Application, verifies parameters, begins logging, and returns true unless the help page is requested.
 // It exits safely with an explicit error message whenever the configuration is invalid.
 func (app *Application) Start() bool {
-	app.manager = runner.NewManager()
-	app.manager.SetConfigTopic(arranger.ProjectName, "a32002", app.appAim(), programVersion)
-	// Capture the command line arguments.
-	app.parseCommandLineArgs()
-	// Print the help page if requested and return false to exit the program.
-	if app.manager.GetBitFlag(runner.MgrFlgHelp) == true {
-		app.manager.HelpPage(runner.HelpDoc(nil, ""))
-		return false
-	}
-	// Print the starting information and return true to commit work.
-	app.manager.PrintStartingInfo()
-	return true
+	var helpPageState bool
+	app.refiner, helpPageState = contractor.NewRefiner(
+		true,
+		true,
+		"",
+		"w32002",
+		arranger.ProjectName,
+		"a32002",
+		"inserts data from one asset to another.",
+		programVersion,
+		[]string{qryInp, keyInp, valInp})
+	return helpPageState
 }
 
 // Commit executes the application's work.
 func (app *Application) Commit() error {
+	app.refiner.Mgr.Say("setting up the refiner ...")
+	if commit, err := app.refiner.Commit(app.refiner.Mgr.GetConfigString(runner.AssetNames)); err != nil {
+		return err
+	} else if commit == false {
+		return nil
+	}
 	app.binFiles = make(map[string]*storekeeper.Container)
 	if err := app.setBinInput(); err != nil {
 		return err
@@ -83,5 +92,5 @@ func (app *Application) End(err error) {
 			}
 		}
 	}
-	app.manager.End(errors.Join(e...))
+	app.refiner.End(errors.Join(e...))
 }

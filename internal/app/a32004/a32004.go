@@ -20,7 +20,7 @@ import (
 
 // constant program version number: to be appended to the ISO 8601 go-interlace version string.
 const (
-	programVersion = "16"                // Increment this number for each release.
+	programVersion = "17"                // Increment this number for each release.
 	maxResults     = 1024                // Initial allocation for the result array.
 	catPath        = "CAT_PATH"          // The catalog path to look for if needed.
 	enumPath       = "ENUM_PATH"         // The enumerator path to look for if needed.
@@ -96,6 +96,7 @@ func (app *Application) End(err error) {
 	}
 	if len(app.binFiles) > 0 {
 		for i := range app.binFiles {
+			app.manager.Say(fmt.Sprintf("closing bin file: %s", app.binFiles[i].Name))
 			if ret := app.binFiles[i].CloseMappedArr(); ret != nil {
 				e = append(e, ret)
 			}

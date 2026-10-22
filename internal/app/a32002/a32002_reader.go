@@ -13,12 +13,12 @@ import (
 )
 
 func (app *Application) setBinInput() error {
-	targetPath := path.Dir(app.manager.GetConfigString(qryInp))
-	sourcePath := path.Dir(app.manager.GetConfigString(keyInp))
+	targetPath := path.Dir(app.refiner.Mgr.GetConfigString(qryInp))
+	sourcePath := path.Dir(app.refiner.Mgr.GetConfigString(keyInp))
 	if sourcePath == targetPath {
 		return errors.New("key and qry bin arrays must be from different assets")
 	}
-	if sourcePath != path.Dir(app.manager.GetConfigString(valInp)) {
+	if sourcePath != path.Dir(app.refiner.Mgr.GetConfigString(valInp)) {
 		return errors.New("key and value bin arrays must be from the same asset")
 	}
 	if err := app.addContainer(keyInp); err != nil {
@@ -57,20 +57,11 @@ func (app *Application) getBinFile(fp, configKey string) error {
 }
 
 func (app *Application) addContainer(configKey string) error {
-	fp := app.manager.GetConfigString(configKey)
-	fn := path.Base(fp)
-	app.binFiles[configKey] = app.newContainer(fp, fn)
+	fp := app.refiner.Mgr.GetConfigString(configKey)
+	app.binFiles[configKey] = storekeeper.NewContainer(fp)
 	if app.binFiles[configKey].Err != nil {
 		return app.binFiles[configKey].Err
 	}
-	app.binFiles[configKey].UpdateFlags(fn)
+	app.binFiles[configKey].UpdateFlags(path.Base(fp))
 	return nil
-}
-
-func (app *Application) newContainer(dirPath, binFileName string) *storekeeper.Container {
-	binFileFullPath := path.Join(dirPath, binFileName)
-	container := storekeeper.NewContainer(binFileFullPath)
-	app.manager.Say("reading bin file: " + binFileFullPath)
-	container.GetDataFromFile(dirPath, app.ignoreVer)
-	return container
 }

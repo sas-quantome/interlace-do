@@ -3,7 +3,7 @@ module github.com/sas-quantome/interlace-do
 go 1.27.0
 
 require (
-	github.com/sas-quantome/interlace-go v0.0.0-20260912150711-7dae01e0173a
+	github.com/sas-quantome/interlace-go v0.0.0-20260921130414-c86121b1f073
 	github.com/stretchr/testify v1.12.1
 )
 

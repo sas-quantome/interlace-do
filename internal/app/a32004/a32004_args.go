@@ -34,7 +34,7 @@ func (app *Application) parseCommandLineArgs() {
 	// Application-specific parameters
 	var inpPath, queryTerms, outFile string
 	flag.StringVar(&outFile, "out-file", "", "Output file name or the output is written to stdout")
-	flag.StringVar(&inpPath, "inp-path", "./", "For example 'metadata/20260818000000' or use the default when reading a single bin file")
+	flag.StringVar(&inpPath, "inp-path", "", "For example 'metadata/20260906180032'")
 	flag.StringVar(&queryTerms, "query-terms", queryTermDefault, "Query term is one or more 'bin-name/operator/value' comma separated")
 	// Parse the command line arguments ///////////////////////////////////////////////////////////////////////////// 2
 	flag.Parse()
@@ -54,7 +54,7 @@ func (app *Application) parseCommandLineArgs() {
 	// The command line arguments override the existing values except for the time tag.
 	app.manager.SetConfig(runner.QueryTerms, queryTerms, queryTerms != queryTermDefault)
 	app.manager.SetConfig(runner.OutFile, outFile, outFile != "")
-	app.manager.SetConfig(runner.InpPath, inpPath, true)
+	app.manager.SetConfig(runner.InpPath, inpPath, inpPath != "")
 	if app.manager.GetBitFlag(runner.MgrFlgHelp) {
 		return
 	}
@@ -70,21 +70,21 @@ func (app *Application) parseCommandLineArgs() {
 			app.manager.Say("inpPath:" + inpPath)
 		}
 	}
-	if err := app.manager.CheckConfig(runner.QueryTerms, runner.OutFile, runner.InpPath); err != nil {
+	if err := app.manager.CheckConfig(runner.QueryTerms, runner.InpPath); err != nil {
 		app.End(err)
 	}
 }
 
 // appAim returns the application's decoding and filtering instructions.
 func (app *Application) appAim() string {
-	return `quick lookup tool for Interlace binary files.
+	return `data retrieval tool for Interlace Assets.
 
          The -query-terms argument order is significant and has the following syntax format: 
 
          'bin-file-name-1/operator-1/value-1,bin-file-name-2/operator-2/value-2, ...' 
 
          The output field order will match the order of the query term string. If the query term string is empty, all 
-         the bin files in the Interlace Property path are decoded in sorted order where the index always leads. 
+         the bin files in the Interlace Property path are scanned in sorted order where the index always leads. 
 
           Examples for -query-terms:
 

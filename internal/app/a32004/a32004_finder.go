@@ -82,15 +82,15 @@ func (app *Application) findBinQuery() {
 			app.binQuery = i // first ordered SDK bin file is the secondary priority
 		}
 	}
-	if app.binQuery < 0 {
+	if app.binQuery >= 0 {
+		app.manager.Say(fmt.Sprintf("binary search: sorted key query: %s", app.binFiles[app.binQuery].Name))
+	} else {
 		app.binQuery = marker // first ordered non-sorted bin file is the last priority
 		if app.binFiles[app.binQuery].IsNuc {
-			app.manager.Say(fmt.Sprintf("nucleotide search: fast: %s", app.binFiles[app.binQuery].Name))
+			app.manager.Say(fmt.Sprintf("nucleotide search: range query: %s", app.binFiles[app.binQuery].Name))
 		} else {
-			app.manager.Say(fmt.Sprintf("linear search: slow: non-sorted key: %s", app.binFiles[app.binQuery].Name))
+			app.manager.Say(fmt.Sprintf("linear search: non-sorted key query: %s", app.binFiles[app.binQuery].Name))
 		}
-	} else {
-		app.manager.Say(fmt.Sprintf("binary search: fast: sorted key: %s", app.binFiles[app.binQuery].Name))
 	}
 }
 

@@ -15,7 +15,7 @@ import (
 
 // constant program version number: to be appended to the ISO 8601 go-interlace version string.
 const (
-	programVersion = "2"                 // Increment this number for each release.
+	programVersion = "3"                 // Increment this number for each release.
 	primaryInpFile = "METADATA_TSV"      // Tab-delimited input file.
 	assetName1     = "metadata"          // A metadata asset record identifies uniqueness.
 	assetName2     = "synonym"           // A metadata identity normally contains synonyms.
@@ -52,7 +52,7 @@ func (app *Application) Start() bool {
 	app.refiner, helpPageState = contractor.NewRefiner(
 		true,
 		false,
-		"",
+		arranger.DnaEntityConcept,
 		arranger.DefaultWorkflow,
 		arranger.ProjectName,
 		"a32001",

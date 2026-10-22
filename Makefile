@@ -39,14 +39,6 @@ install: ## Install cmd applications in the equivalent to $GOPATH/bin
 clean: ## Remove the bin folder and test files leaving the download data files intact
 	rm -rf ./bin $(COV)
 
-.PHONY: check
-check: ## Validate URL links
-	bash ./scripts/bash/b32001 ./configs/input/url.txt
-
-.PHONY: download
-download: check ## Downloads, renames the non-persistent ones, and moves all to $ENV_ALT_DATA_PATH
-	bash ./scripts/bash/b32002 ./configs/input/url.txt
-
 .PHONY: help
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

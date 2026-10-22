@@ -33,10 +33,11 @@ func (app *Application) saveBin() error {
 	case storekeeper.FDT:
 		err = co.SaveNumArr(fp, app.bin.StackFDT.Items)
 	}
-	app.manager.Say(fmt.Sprintf("total source asset items searched in %s: %d", app.binFiles[keyInp].Name, app.binFiles[keyInp].Len))
-	app.manager.Say(fmt.Sprintf("total source asset items searched in %s: %d", app.binFiles[valInp].Name, app.binFiles[valInp].Len))
-	app.manager.Say(fmt.Sprintf("total target asset items searched in %s: %d", app.binFiles[qryInp].Name, app.binFiles[qryInp].Len))
-	app.manager.Say(fmt.Sprintf("total target asset items inserted in %s: %d", co.Name, co.Len))
+	app.refiner.Mgr.Say(fmt.Sprintf("total source asset items searched in %s: %d", app.binFiles[keyInp].Name, app.binFiles[keyInp].Len))
+	app.refiner.Mgr.Say(fmt.Sprintf("total source asset items searched in %s: %d", app.binFiles[valInp].Name, app.binFiles[valInp].Len))
+	app.refiner.Mgr.Say(fmt.Sprintf("total target asset items searched in %s: %d", app.binFiles[qryInp].Name, app.binFiles[qryInp].Len))
+	app.refiner.Mgr.Say(fmt.Sprintf("total target asset items inserted in %s: %d", co.Name, app.nInserted))
+	app.refiner.Mgr.Say(fmt.Sprintf("total target asset items inserted in %s for search not found: %d", co.Name, app.notFound))
 	return err
 }
 
@@ -110,6 +111,8 @@ func (app *Application) pushNotFound() {
 	case storekeeper.FDT:
 		app.bin.StackFDT.Push(math.MaxFloat64)
 	}
+	app.notFound++
+	app.nInserted++
 }
 
 func (app *Application) pushFound(x int) {
@@ -129,4 +132,5 @@ func (app *Application) pushFound(x int) {
 	case storekeeper.FDT:
 		app.bin.StackFDT.Push(app.binFiles[valInp].FArr[x])
 	}
+	app.nInserted++
 }

@@ -1,1 +1,11 @@
-file:///Users/foglio/data/genome/GCA_000001405_15_metadata.tsv.gz#METADATA_TSV
+# This is the URI file for a32001, a32002, and a32004.
+# Update the paths to match on your machine.
+# a32001
+file:///Users/foglio/interlace-ex/data/GCA_000001405_15_metadata.tsv.gz#METADATA_TSV
+# a32002
+file:///Users/foglio/interlace-ex/entity/gene/metadata/20260906180032/property/suk_entrez_gene_id_u.bin#KEY_INP_FILE
+file:///Users/foglio/interlace-ex/entity/gene/metadata/20260906180032/property/udk_gene_symbol_s.bin#VAL_INP_FILE
+file:///Users/foglio/interlace-ex/entity/gene/medical_genetics/20260906180032/property/sdk_entrez_gene_id_u.bin#QRY_INP_FILE
+# a32004
+# https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.26_GRCh38/GRCh38_major_release_seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_full_plus_hs38d1_analysis_set.fna.gz
+file:///Users/foglio/interlace-ex/data/GCA_000001405.15_GRCh38_full_plus_hs38d1_analysis_set.fna.gz#ASSEMBLY_SEQUENCE
