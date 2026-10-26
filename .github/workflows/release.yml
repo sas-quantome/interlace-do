@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         # Building for both Intel (amd64) and Apple Silicon / ARM (arm64)
-        os: [linux, windows, darwin]
+        os: [linux, darwin]
         arch: [amd64, arm64]
 
     steps:
