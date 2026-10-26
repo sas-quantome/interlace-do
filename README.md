@@ -1,4 +1,4 @@
-###### October 26, 2026: interlace-do readme v4
+###### October 25, 2026: interlace-do readme v3
 
 # interlace-do
 
