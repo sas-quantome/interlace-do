@@ -1,0 +1,64 @@
+name: Release and Build
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # ---------------------------------------------------------
+  # JOB 1: Calculate versions and generate changelog
+  # ---------------------------------------------------------
+  release-please:
+    runs-on: ubuntu-latest
+    # We must expose these outputs so Job 2 knows what happened
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  # ---------------------------------------------------------
+  # JOB 2: Compile binaries and attach them (Runs only on publish)
+  # ---------------------------------------------------------
+  build-and-attach:
+    # 1. Wait for Job 1 to finish
+    needs: release-please
+    # 2. ONLY run this job if a release was actually published (merged)
+    if: ${{ needs.release-please.outputs.release_created }}
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Building for both Intel (amd64) and Apple Silicon / ARM (arm64)
+        os: [linux, windows, darwin]
+        arch: [amd64, arm64]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27'
+
+      - name: Compile Binary
+        # This creates a uniquely named file like: my-app-darwin-arm64
+        run: |
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o my-app-${{ matrix.os }}-${{ matrix.arch }} main.go
+
+      - name: Attach to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # 3. Tell the action exactly which release to attach the files to
+          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          files: my-app-${{ matrix.os }}-${{ matrix.arch }}*
