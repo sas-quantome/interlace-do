@@ -44,13 +44,18 @@ jobs:
 
       - name: Compile All Binaries (Cross-Compile)
         run: |
+          # Automatically find all items inside ./cmd/
           for cmd in $(ls ./cmd); do
-            for os in linux darwin; do
-              for arch in amd64 arm64; do
-                echo "Building $cmd for $os/$arch..."
-                GOOS=$os GOARCH=$arch go build -o ${cmd}-${os}-${arch} ./cmd/${cmd}
+            # Check if the item is actually a directory (ignores README.md, etc.)
+            if [ -d "./cmd/$cmd" ]; then
+              # Only loop through Linux and macOS
+              for os in linux darwin; do
+                for arch in amd64 arm64; do
+                  echo "Building $cmd for $os/$arch..."
+                  GOOS=$os GOARCH=$arch go build -o ${cmd}-${os}-${arch} ./cmd/${cmd}
+                done
               done
-            done
+            fi
           done
 
       - name: Attach Assets and Publish Release
