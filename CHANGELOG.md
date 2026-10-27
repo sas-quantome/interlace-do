@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.1-rc.0](https://github.com/sas-quantome/interlace-do/compare/v1.0.0-rc.0...v1.0.1-rc.0) (2026-10-27)
+## [1.0.0-rc.1](https://github.com/sas-quantome/interlace-do/compare/v1.0.0-rc.0...v1.0.1-rc.1) (2026-10-27)
 
 
 ### Bug Fixes
