@@ -51,14 +51,18 @@ jobs:
         with:
           go-version: '1.27'
 
-      - name: Compile Binary
-        # This creates a uniquely named file like: my-app-darwin-arm64
+      - name: Compile Binaries
+        # Loop through each folder in ./cmd and build them individually
         run: |
-          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o my-app-${{ matrix.os }}-${{ matrix.arch }} main.go
+          for cmd in a32001 a32002 a32003 a32004; do
+            echo "Building $cmd for ${{ matrix.os }}/${{ matrix.arch }}..."
+            GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o ${cmd}-${{ matrix.os }}-${{ matrix.arch }} ./cmd/${cmd}
+          done
 
       - name: Attach to Release
         uses: softprops/action-gh-release@v2
         with:
-          # 3. Tell the action exactly which release to attach the files to
           tag_name: ${{ needs.release-please.outputs.tag_name }}
-          files: my-app-${{ matrix.os }}-${{ matrix.arch }}*
+          # Use a wildcard to upload all binaries generated for this OS/Arch
+          files: |
+            a3200*-${{ matrix.os }}-${{ matrix.arch }}*
