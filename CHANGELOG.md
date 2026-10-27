@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2-rc.1](https://github.com/sas-quantome/interlace-do/compare/v1.0.1-rc.1...v1.0.2-rc.1) (2026-10-27)
+
+
+### Bug Fixes
+
+* resolve immutable release block and build matrix ([a0cda37](https://github.com/sas-quantome/interlace-do/commit/a0cda373845452a5a011a948625c22eb7052f3f4))
+
 ## [1.0.1-rc.1](https://github.com/sas-quantome/interlace-do/compare/v1.0.0-rc.1...v1.0.1-rc.1) (2026-10-27)
 
 
