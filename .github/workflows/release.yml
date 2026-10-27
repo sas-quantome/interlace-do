@@ -33,7 +33,6 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -45,11 +44,8 @@ jobs:
 
       - name: Compile All Binaries (Cross-Compile)
         run: |
-          # Loop through all 4 CLI tools
-          for cmd in a32001 a32002 a32003 a32004; do
-            # Loop through both operating systems
+          for cmd in $(ls ./cmd); do
             for os in linux darwin; do
-              # Loop through both architectures
               for arch in amd64 arm64; do
                 echo "Building $cmd for $os/$arch..."
                 GOOS=$os GOARCH=$arch go build -o ${cmd}-${os}-${arch} ./cmd/${cmd}
@@ -61,8 +57,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.tag_name }}
-          # This uploads the files to the Draft, then flips it to "Published"
           draft: false
-          # Upload everything we just built
           files: |
-            a3200*-*
+            *-linux-*
+            *-darwin-*
