@@ -1,6 +1,8 @@
-###### October 27, 2026: interlace-do readme v4
+###### October 27, 2026: interlace-do readme v5
 
 # interlace-do
+
+[![Build Status](https://github.com/sas-quantome/interlace-do/actions/workflows/release.yml/badge.svg)](https://github.com/sas-quantome/interlace-do/actions/workflows/release.yml) [![Latest Release](https://img.shields.io/github/v/release/sas-quantome/interlace-do?include_prereleases&sort=semver)](https://github.com/sas-quantome/interlace-do/releases) [![Go Version](https://img.shields.io/github/go-mod/go-version/sas-quantome/interlace-do)](https://github.com/sas-quantome/interlace-do/blob/main/go.mod)
 
 Welcome to **interlace-do**! Interlace Go toolset and usage with the **interlace-ex** Gene data playground.
 
