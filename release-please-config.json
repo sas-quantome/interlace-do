@@ -2,7 +2,8 @@
   "packages": {
     ".": {
       "release-type": "go",
-      "prerelease": true
+      "prerelease": true,
+      "prerelease-type": "rc"
     }
   },
   "draft": true,

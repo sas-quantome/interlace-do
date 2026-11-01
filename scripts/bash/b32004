@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+# Copyright 2026 Quantome SAS
+# SPDX-License-Identifier: Apache-2.0
+#
+#
+# Bash script name: b32004
+# Purpose: mock application made to test the Worker.
+#
+# Input: Timestamp|High|Low and Date TSV files.
+# Output: BTC data with readable date strings.
+
+set -o errexit
+
+if [[ $# -ne 2 ]] ; then
+    echo 'Number of parameters passed: '$#
+    echo 'Usage: b32004 -A <ARTIFACT_PATH>'
+    exit 1
+fi
+
+exitFunction()
+{
+   echo 'Err: bad use of parameters'
+   exit 1
+}
+
+while getopts "A:" opt
+do
+   case "$opt" in
+      A ) ARTIFACT_PATH="$OPTARG" ;;
+      ? ) exitFunction ;;
+   esac
+done
+
+if [ ! -e "$ARTIFACT_PATH" ]; then
+  echo "Workspace path=[$ARTIFACT_PATH] does not exist."
+  exit 1
+fi
+
+# shellcheck disable=SC2129
+{
+  sed 's/Mean/#H Mean/' "${ARTIFACT_PATH}/btc_high.tsv"
+  sed 's/Mean/#L Mean/' "${ARTIFACT_PATH}/btc_low.tsv"
+} >> "${ARTIFACT_PATH}/btc_stats.tmp"
+printf "#Date\tTime\tHigh\tLow\n" >> "${ARTIFACT_PATH}/btc_stats.tmp"
+paste "${ARTIFACT_PATH}/btc_datetime.tsv" "${ARTIFACT_PATH}/btc_refined.tsv" >> "${ARTIFACT_PATH}/btc_stats.tmp"
+cut -f 1,3,4 "${ARTIFACT_PATH}/btc_stats.tmp" > "${ARTIFACT_PATH}/btc_stats.txt"
+rm "${ARTIFACT_PATH}/btc_stats.tmp"

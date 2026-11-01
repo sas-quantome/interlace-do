@@ -4,6 +4,10 @@ github.com/sas-quantome/interlace-go v0.0.0-20260921130414-c86121b1f073 h1:6KTjR
 github.com/sas-quantome/interlace-go v0.0.0-20260921130414-c86121b1f073/go.mod h1:8MVRCs/36Im+bBwKrvdnO+zKJt2rF5EWARfNBtr+abk=
 github.com/sas-quantome/interlace-go v1.0.0-rc.1 h1:DFbJL5FCkCoF0FA/fN70ycrwWGciS/PlZbAQugXsP1s=
 github.com/sas-quantome/interlace-go v1.0.0-rc.1/go.mod h1:8MVRCs/36Im+bBwKrvdnO+zKJt2rF5EWARfNBtr+abk=
+github.com/sas-quantome/interlace-go v1.0.0-rc.2 h1:o7BU3WwEba72TpbcKO+5Z85Nt3xR2r+F1P93NVwHzoY=
+github.com/sas-quantome/interlace-go v1.0.0-rc.2/go.mod h1:8MVRCs/36Im+bBwKrvdnO+zKJt2rF5EWARfNBtr+abk=
+github.com/sas-quantome/interlace-go v1.0.0-rc.3 h1:OG3URVt0dO1BGsRwCHNOv9NK0XWy7u/HMQi8EJJnuyQ=
+github.com/sas-quantome/interlace-go v1.0.0-rc.3/go.mod h1:8MVRCs/36Im+bBwKrvdnO+zKJt2rF5EWARfNBtr+abk=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
 go.yaml.in/yaml/v3 v3.0.5 h1:N6y/pJk8buWs9NY5ERU2HSMfm+IuD/OtfdAnq6kESPw=

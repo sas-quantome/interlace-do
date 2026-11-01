@@ -1,6 +1,10 @@
 DEBUG ?= false
 
 COV="./coverage.txt"
+FUNC="./test/base/event/btc/w10101/20260101000000/function"
+EXEC="./test/base/agent/execution/202601/01000000"
+ACTION="./test/base/event/btc/w10101/20260101000000/action"
+ARTIFACT="./test/base/event/btc/w10101/20260101000000/artifact"
 
 PKG_VERSION ?= $(shell git describe --tags 2>/dev/null || git rev-parse --short HEAD)
 DATE_FMT = +%Y-%m-%d
@@ -27,6 +31,7 @@ build: ## Build the cmd applications
 	go build -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" -o ./bin/a32002 ./cmd/a32002
 	go build -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" -o ./bin/a32003 ./cmd/a32003
 	go build -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" -o ./bin/a32004 ./cmd/a32004
+	go build -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" -o ./bin/a32005 ./cmd/a32005
 
 .PHONY: install
 install: ## Install cmd applications in the equivalent to $GOPATH/bin
@@ -34,10 +39,20 @@ install: ## Install cmd applications in the equivalent to $GOPATH/bin
 	GO111MODULE=on go install -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" ./cmd/a32002
 	GO111MODULE=on go install -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" ./cmd/a32003
 	GO111MODULE=on go install -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" ./cmd/a32004
+	GO111MODULE=on go install -trimpath -ldflags "$(GO_LDFLAGS) -X main.debugMode=$(DEBUG)" ./cmd/a32005
 
 .PHONY: clean
 clean: ## Remove the bin folder and test files leaving the download data files intact
-	rm -rf ./bin $(COV)
+	rm -rf ./bin ./test/data/btcusd_one_min_data.csv.gz $(COV) $(FUNC)/j* $(ACTION)/j* $(ARTIFACT)/b* $(EXEC)/*.tsv
+
+.PHONY: check
+check: ## Validate URL links
+	bash ./scripts/bash/b32008 ./configs/input/url.txt
+
+.PHONY: download
+download: check ## Download files in the URL list, renames the non-persistent ones, and moves them to $ENV_ALT_DATA_PATH
+	bash ./scripts/bash/b32006 ./configs/input/url.txt
+	bash ./scripts/bash/b32007
 
 .PHONY: help
 help: ## Display this help screen

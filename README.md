@@ -1,10 +1,10 @@
-###### October 27, 2026: interlace-do readme v5
+###### November 1, 2026: interlace-do readme v6
 
-# interlace-do
+# Interlace Do: High-Speed CLI Querying & Deterministic DAG Workflows
 
 [![Build Status](https://github.com/sas-quantome/interlace-do/actions/workflows/release.yml/badge.svg)](https://github.com/sas-quantome/interlace-do/actions/workflows/release.yml) [![Latest Release](https://img.shields.io/github/v/release/sas-quantome/interlace-do?include_prereleases&sort=semver)](https://github.com/sas-quantome/interlace-do/releases) [![Go Version](https://img.shields.io/github/go-mod/go-version/sas-quantome/interlace-do)](https://github.com/sas-quantome/interlace-do/blob/main/go.mod)
 
-Welcome to **interlace-do**! Interlace Go toolset and usage with the **interlace-ex** Gene data playground.
+Command-line application suite and interactive tutorial (40+ command-line examples via a32004) for querying, streaming, and building *Interlace Assets* from FASTA and tab-delimited genomic streams into LLMs, relational databases, and Linux pipelines.
 
 ![interlace-do](assets/interlace-do.png)
 

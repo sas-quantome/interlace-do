@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#
+# Copyright 2026 Quantome SAS
+# SPDX-License-Identifier: Apache-2.0
+#
+# Bash script name: b32002
+# Purpose: mock application made to test the Worker.
+#
+# Input: TSV file containing Timestamp, High and Low TAB delimited; created with b32001.
+# Output: formated date.
+# Change: converts the timestamp value to the date time string.
+
+set -o errexit
+
+if [[ $# -ne 2 ]] ; then
+    echo 'Number of parameters passed: '$#
+    echo 'Usage: b32002 -A <ARTIFACT_PATH>'
+    exit 1
+fi
+
+exitFunction()
+{
+   echo 'Err: bad use of parameters'
+   exit 1
+}
+
+while getopts "A:" opt
+do
+   case "$opt" in
+      A ) ARTIFACT_PATH="$OPTARG" ;;
+      ? ) exitFunction ;;
+   esac
+done
+
+if [ ! -e "$ARTIFACT_PATH" ]; then
+  echo "Workspace path=[$ARTIFACT_PATH] does not exist."
+  exit 1
+fi
+
+# Note: running the date system command for every timestamp value in the input file.
+# OK for the mocking test; otherwise consider using a programming language.
+cut -f 1 "${ARTIFACT_PATH}/btc_refined.tsv" | xargs -n 1 date -r > "${ARTIFACT_PATH}/btc_datetime.tsv"

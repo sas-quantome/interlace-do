@@ -1,4 +1,4 @@
-# This is the URI file for a32001, a32002, and a32004.
+# This is the URI file for a32001, a32002, a32004, and a32005.
 # Update the paths to match on your machine.
 # a32001
 file:///Users/foglio/interlace-ex/data/GCA_000001405_15_metadata.tsv.gz#METADATA_TSV
@@ -9,3 +9,40 @@ file:///Users/foglio/interlace-ex/entity/gene/medical_genetics/20260906180032/pr
 # a32004
 # https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.26_GRCh38/GRCh38_major_release_seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_full_plus_hs38d1_analysis_set.fna.gz
 file:///Users/foglio/interlace-ex/data/GCA_000001405.15_GRCh38_full_plus_hs38d1_analysis_set.fna.gz#ASSEMBLY_SEQUENCE
+# a32005
+# Use this URI file to facilitate applications finding their correct resources.
+# interlace-ex pipeline files:
+file:///Users/foglio/work/interlace-ex/meta.tsv#PIPELINE_META
+file:///Users/foglio/interlace-ex/agent/configuration/sop.tsv#PIPELINE_SOP
+file:///Users/foglio/interlace-ex/agent/configuration/work.tsv#PIPELINE_WORK
+# Persistent URI character sequences have constant file paths:
+https://purl.obolibrary.org/obo/hp.obo
+https://purl.obolibrary.org/obo/oba.obo
+https://purl.obolibrary.org/obo/mondo.obo
+https://raw.githubusercontent.com/Superraptor/GSSO/master/gsso.obo
+https://ftp.ncbi.nih.gov/gene/DATA/gene2accession.gz
+https://ftp.ncbi.nih.gov/gene/DATA/gene2ensembl.gz
+https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz
+https://ftp.ncbi.nih.gov/gene/DATA/gene2pubmed.gz
+https://ftp.ncbi.nih.gov/gene/DATA/gene_info.gz
+https://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz
+https://ftp.ncbi.nih.gov/gene/DATA/gene_summary.gz
+https://ftp.ncbi.nih.gov/gene/DATA/mim2gene_medgen
+https://ftp.ncbi.nih.gov/gene/GeneRIF/generifs_basic.gz
+https://ftp.ncbi.nih.gov/gene/GeneRIF/interactions.gz
+https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz
+https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/HUMAN_9606_idmapping.dat.gz
+https://reactome.org/download/current/NCBI2Reactome_All_Levels.txt
+https://reactome.org/download/current/NCBI2Reactome_PE_Reactions.txt
+https://reactome.org/download/current/ReactionPMIDS.txt
+# Non-persistent URI character sequences may not have a constant filename.
+# Files with non-persistent URL are manually downloaded and declared as absolute file paths.
+# Because their file names are unknown, the application looks for the unique URI fragment e.g., #STRING_DB appended at the end.
+# https://stringdb-downloads.org/download/protein.links.v12.0/9606.protein.links.v12.0.txt.gz
+file:///Users/foglio/interlace-ex/data/string-protein-links.tsv.gz#STRING_DB
+# https://ftp.ebi.ac.uk/pub/databases/gwas/releases/latest/gwas-catalog-associations_ontology-annotated-full.zip
+file:///Users/foglio/interlace-ex/data/gwas-catalog-associations-annotated.tsv.gz#GWAS_CATALOG
+# https://ftp.ebi.ac.uk/pub/databases/gwas/releases/latest/gwas-efo-trait-mappings.tsv
+file:///Users/foglio/interlace-ex/data/gwas-efo-trait-mappings.tsv.gz#GWAS_EFO
+# https://ftp.ebi.ac.uk/pub/databases/gwas/releases/latest/gwas-catalog-ancestry.tsv
+file:///Users/foglio/interlace-ex/data/gwas-catalog-ancestry.tsv.gz#GWAS_ANCESTRY

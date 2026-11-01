@@ -1,0 +1,21 @@
+w12101	activity	Creates the HSA genome entity assets: hsa_genome_metadata and hsa_genome_sequence.
+w12101	workflow	a11408 a12101 a12102 b11401
+w12101	pipeline	1 0 2 1 0 3 2 0
+w12201	activity	Creates the HSA genes entity assets: entrez_gene_db, entrez_gene_go_annotation, entrez_gene_index, gene_alias, gene_alpha_missense, gene_expression_gtex, gene_expression_hpa, gene_phenomexcan_disease, gene_phenomexcan_gtex, gene_phenomexcan_tie, gene_phenomexcan_trait, gene_rif_pubmed_annotation, and protein_interaction.
+w12201	workflow	a11408 a12201 a12202 a12203 a12204 a12205 a12206 a12207 a12208 a12209 a12210 a12211 a12212 a12213
+w12201	pipeline	1 0 2 0 3 2 0 4 0 5 0 6 0 7 3 0 8 3 0 9 8 0 10 3 0 11 0 12 3 0 13 3 0
+w12301	activity	Creates the HSA Sequence Feature entity: hsa_physical_map.
+w12301	workflow	a11408 a12301 a12302 a12303 a12304
+w12301	pipeline	1 0 2 1 0 3 1 0 4 2 0
+w12401	activity	Creates the HSA Sequence Variant entity assets: dbSNP, dbSNP RefSNP ID, dbVar variant ID, ClinVar variant ID, ALFA variant ID, AlphaMissense variant ID, GnomAD WGS variant ID, and annotation variant ID.
+w12401	workflow	a11408 a12402 a12403 a12405 a12406 a12409 a12413 a12408 a12410 b11406 b11407 b11408 a12411 a12410 b11406 b11407 b11408 a12411
+w12401	pipeline	1 0 2 1 0 3 0 4 0 5 0 6 0 7 2 0 8 7 0 9 8 0 10 8 0 11 8 0 12 11 10 9 0 13 12 0 14 13 0 15 13 0 16 13 0 17 16 15 14 0
+w12402	activity	Creates the Sequence Variant entity assets: dbSNP merged ID, Alleles, and GWAS variant ID.
+w12402	workflow	a11408 a12404 b11405 a12401 a12407
+w12402	pipeline	1 0 2 0 3 2 0 4 3 0
+w12403	activity	Creates the HSA Sequence Variant entity asset: variant ID index.
+w12403	workflow	a11408 a12412
+w12403	pipeline	1 0
+w10101	activity	Refines the BTC data, converts timestamps to dates and computes basic stats.
+w10101	workflow	a32005 b32001 b32002 b32003 b32003 b32004 b32005
+w10101	pipeline	1 0 2 1 0 3 2 0 4 2 0 5 4 3 0 6 5 0

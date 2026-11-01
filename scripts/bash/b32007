@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Copyright 2026 Quantome SAS. All Rights Reserved.
+#
+#  This file is part of go-interlace.
+#  Unauthorized copying of this file, via any medium, is strictly prohibited.
+#  Proprietary and confidential.
+#
+#
+
+#
+# Description: Moves the files to the ENV_ALT_DATA_PATH with stable filenames.
+#
+# Files that have unstable names are renamed, e.g., 9606.protein.links.v12.5.txt.gz to string-protein-links.tsv.gz
+# IF 9606.protein.links.v12.5.txt.gz UPGRADES TO 9606.protein.links.v13.0.txt.gz
+# THEN CHANGE 9606.protein.links.v12.5.txt.gz TO 9606.protein.links.v13.0.txt.gz in this script.
+# By renaming unstable filenames to a constant name, the InterlaceEx Gene workflow will continue to work.
+
+set -o errexit
+
+mv mim2gene_medgen ${ENV_ALT_DATA_PATH}/mim2gene_medgen
+mv NCBI2Reactome* ${ENV_ALT_DATA_PATH}/.
+mv 9606.protein.links.v12.5.txt.gz ${ENV_ALT_DATA_PATH}/string-protein-links.tsv.gz
+mv ReactionPMIDS.txt ${ENV_ALT_DATA_PATH}/.
+unzip gwas-catalog-associations_ontology-annotated-full.zip
+gzip gwas-catalog-download-associations-alt-full.tsv
+mv gwas-catalog-download-associations-alt-full.tsv.gz ${ENV_ALT_DATA_PATH}/gwas-catalog-associations-annotated.tsv.gz
+gzip gwas-efo-trait-mappings.tsv
+mv gwas-efo-trait-mappings.tsv.gz ${ENV_ALT_DATA_PATH}/gwas-efo-trait-mappings.tsv.gz
+gzip gwas-catalog-ancestry.tsv
+mv gwas-catalog-ancestry.tsv.gz ${ENV_ALT_DATA_PATH}/gwas-catalog-ancestry.tsv.gz
+mv *.obo ${ENV_ALT_DATA_PATH}/.
+mv *.gz ${ENV_ALT_DATA_PATH}/.
+rm gwas-catalog-associations_ontology-annotated-full.zip
+
+echo "All tasks completed."

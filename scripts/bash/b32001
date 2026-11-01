@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+# Copyright 2026 Quantome SAS
+# SPDX-License-Identifier: Apache-2.0
+#
+# Bash script name: b32001
+# Purpose: mock application made to test the Worker.
+#
+# Input: Gzip compressed CSV file containing 'Timestamp,Open,High,Low,Close,Volume' in the first line.
+# Output: Timestamp, High, and Low columns without header names.
+# Filter: extracts timestamps ending with 0000.0 to reduce computation from every minute down to 1 every 8 hrs.
+# Change: '.0' is trimmed out from the Timestamp values after filtering.
+
+set -o errexit
+
+if [[ $# -ne 4 ]] ; then
+    echo 'Number of parameters passed: '$#
+    echo 'Usage: b32001 -i <INPUT_FILE> -A <ARTIFACT_PATH>'
+    exit 1
+fi
+
+exitFunction()
+{
+   echo 'Err: bad use of parameters'
+   exit 1
+}
+
+while getopts "i:A:" opt
+do
+   case "$opt" in
+      i ) INPUT_FILE="$OPTARG" ;;
+      A ) ARTIFACT_PATH="$OPTARG" ;;
+      ? ) exitFunction ;;
+   esac
+done
+
+if [ ! -e "$ARTIFACT_PATH" ]; then
+  echo "Workspace path=[$ARTIFACT_PATH] does not exist."
+  exit 1
+fi
+
+if [ ! -e "$INPUT_FILE" ]; then
+  echo "Input file=[$INPUT_FILE] does not exist."
+  exit 1
+fi
+
+# remove only the first instance: sed 's/.0\t/\t/' otherwise 's/.0\t/\t/g' replaces all.
+gzip -dc "$INPUT_FILE" | cut -d ',' -f 1,3,4 | tail +2 | sed 's/,/\t/g' | grep 0000.0 | sed 's/.0\t/\t/' > "${ARTIFACT_PATH}/btc_refined.tsv"
