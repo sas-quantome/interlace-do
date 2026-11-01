@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0-rc.1](https://github.com/sas-quantome/interlace-do/compare/v1.0.2-rc.1...v1.1.0-rc.1) (2026-11-01)
+
+
+### Features
+
+* add a32005 and bash scripts ([181cec4](https://github.com/sas-quantome/interlace-do/commit/181cec4cc0e5bd3eabf1b310cef4386c2fa61ba2))
+
 ## [1.0.2-rc.1](https://github.com/sas-quantome/interlace-do/compare/v1.0.1-rc.1...v1.0.2-rc.1) (2026-10-27)
 
 
