@@ -1,4 +1,4 @@
-###### November 1, 2026: interlace-do readme v6
+###### November 1, 2026: interlace-do readme v7
 
 # Interlace Do: High-Speed CLI Querying & Deterministic DAG Workflows
 
@@ -24,7 +24,7 @@ Command-line application suite and interactive tutorial (40+ command-line exampl
 
 ### 1. Introduction
 
-Both the **interlace-ex** [Gene data stack](https://github.com/sas-quantome/interlace-ex) and the **interlace-do** [toolset](cmd) use the **interlace-go** [library](https://github.com/sas-quantome/interlace-go) to build their CLI applications.
+Both the **interlace-ex** [Gene data stack](https://github.com/sas-quantome/interlace-ex) and the **interlace-do** [toolset](cmd/README.md) use the **interlace-go** [library](https://github.com/sas-quantome/interlace-go) to build their CLI applications.
 
 Once you build the [Gene data stack](https://github.com/sas-quantome/interlace-ex) with **interlace-ex**, you can use the **interlace-do** application [a32004](cmd/a32004) to learn how to search for and retrieve data from any **Interlace Asset**. This application offers a tutorial with more than 40 command-line examples to help you understand how data is organized and accessed. You will also find other applications in the [cmd](cmd) folder, such as tools to create **Interlace Assets** from tab-delimited or DNA sequence FASTA files.
 
